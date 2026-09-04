@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://v9-skills.local/schemas/storyboard.schema.json",
+  "title": "v9 Storyboard Projection",
+  "description": "Machine-readable projection of the canonical STORYBOARD.md plan-layer artifact.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["project", "timingSource", "shots"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "timingSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["srt", "manual", "other"]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "start", "end", "narrativeBeat", "visualIntent", "execution"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^shot-[a-z0-9][a-z0-9-]*$"
+          },
+          "start": {
+            "type": "string",
+            "minLength": 1
+          },
+          "end": {
+            "type": "string",
+            "minLength": 1
+          },
+          "narrativeBeat": {
+            "type": "string",
+            "minLength": 1
+          },
+          "voiceoverRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "visualIntent": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assetCandidates": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "execution": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["renderer"],
+            "properties": {
+              "renderer": {
+                "type": "string",
+                "enum": ["remotion", "hyperframes"]
+              },
+              "pattern": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "transitionIn": {
+            "type": "string"
+          },
+          "transitionOut": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["planned", "ready", "rendered", "blocked"]
+          }
+        }
+      }
+    }
+  }
+}

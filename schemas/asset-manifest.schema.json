@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://v9-skills.local/schemas/asset-manifest.schema.json",
+  "title": "v9 Asset Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projectId", "generatedAt", "assets"],
+  "properties": {
+    "projectId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "path", "description", "provenance", "license", "reuse"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^asset-[a-z0-9][a-z0-9-]*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["image", "video", "logo", "icon", "audio", "font", "generated", "other"]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "durationSeconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source", "identityConfidence"],
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sourceUrl": {
+                "type": ["string", "null"]
+              },
+              "capturedAt": {
+                "type": ["string", "null"],
+                "format": "date-time"
+              },
+              "identityConfidence": {
+                "type": "string",
+                "enum": ["verified", "probable", "unknown"]
+              }
+            }
+          },
+          "license": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status"],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["confirmed", "unverified", "restricted", "forbidden"]
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          },
+          "reuse": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["allowed", "usageCount"],
+            "properties": {
+              "allowed": {
+                "type": "boolean"
+              },
+              "usageCount": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "lastUsedAt": {
+                "type": ["string", "null"],
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

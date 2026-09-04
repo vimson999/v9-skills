@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://v9-skills.local/schemas/render-output.schema.json",
+  "title": "v9 Render Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projectId", "renderedAt", "outputs", "verification"],
+  "properties": {
+    "projectId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "renderedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "kind", "renderer", "durationSeconds", "frameRate"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["video", "scene", "audio", "captions", "report", "other"]
+          },
+          "renderer": {
+            "type": "string",
+            "enum": ["remotion", "hyperframes", "mixed"]
+          },
+          "durationSeconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "frameRate": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "checks"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["passed", "warning", "failed"]
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "status"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "type": "string",
+                "enum": ["passed", "warning", "failed"]
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
