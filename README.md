@@ -53,6 +53,8 @@ python3 -m unittest discover -s tests -p 'test_image_*.py'
 
 交付前执行 [图片分镜语义审查](skills/srt-visual-director/references/image-plan-review.md)，修复文字分层、主/备用方案连续性、静态画面表达与配置漂移。脚本返回检查范围及未检查项目；`valid=true` 不能代替语义审查或样片验收。
 
+`python3 skills/srt-visual-director/scripts/image_timeline.py review STORYBOARD.md` 提取保存后的实际 JSON 字段，供逐镜交叉核对；可重复传入 `--shot` 分批读取。修改设计须同步关联字段与可读表，保存后重新读取并复查，再写审查结论。此命令不自动判断语义质量，也不创建第二份分镜。
+
 可查看 [19 秒桌面整理分镜样例](tests/fixtures/image-director/STORYBOARD.md)：由独立执行者实际读取本 Skill 后产出，使用合成文案与候选元数据，仅验证策划交接；没有生成图片或视频。
 
 导演方案与画风可以独立配置：已提供「兼听研报」「中老年健康科普」两套表达方案，以及两套可替换的起始画风。查看 [配置目录与项目示例](presets/README.md)。配置随导演 Skill 分发，不新增题材 Skill；本次有效规则保存在项目分镜中。

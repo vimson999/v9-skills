@@ -211,6 +211,39 @@ class PlanTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 timeline.load_plan(path)
 
+    def test_review_reads_actual_fields_despite_prose_claim_of_success(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "STORYBOARD.md"
+            shot = self.plan["shots"][0]
+            shot["image"]["overlay"]["labels"] = ["叙事转折"]
+            shot["visualIntent"] = "卡片随风重新排列的过程"
+            shot["image"]["prompt"] = "静态桌面，卡片已经摆好。"
+            def write_and_review():
+                path.write_text("# 审查\n全部已同步，无内部标签。\n```json\n" + json.dumps(self.plan) + "\n```\n")
+                out = io.StringIO()
+                with contextlib.redirect_stdout(out):
+                    self.assertEqual(timeline.main(["review", str(path), "--shot", shot["id"]]), 0)
+                return json.loads(out.getvalue())
+            packet = write_and_review()
+            actual = packet["shots"][0]
+            self.assertEqual(actual["image"]["overlay"]["labels"], ["叙事转折"])
+            self.assertEqual(actual["visualIntent"], shot["visualIntent"])
+            self.assertEqual(actual["image"]["prompt"], shot["image"]["prompt"])
+            self.assertEqual(packet["reviewStatus"], "not_evaluated")
+            # Re-reading must expose the saved correction, not a stale review packet.
+            shot["image"]["overlay"]["labels"] = []
+            self.assertEqual(write_and_review()["shots"][0]["image"]["overlay"]["labels"], [])
+
+    def test_review_batches_keep_order_and_reject_unknown_shots(self):
+        before = copy.deepcopy(self.plan)
+        ids = [self.plan["shots"][1]["id"], self.plan["shots"][0]["id"]]
+        packet = timeline.review_packet(self.plan, ids)
+        self.assertEqual(packet["shots"], self.plan["shots"][:2])
+        self.assertEqual(packet["scope"], "selected_shots")
+        with self.assertRaises(ValueError):
+            timeline.review_packet(self.plan, ["shot-missing"])
+        self.assertEqual(self.plan, before)
+
     def test_schema_checker_supports_all_keywords_in_profile(self):
         allowed = {"$schema", "$id", "title", "description", "type", "const", "enum", "required", "properties", "additionalProperties", "items", "minItems", "minLength", "minimum", "pattern"}
         def visit(node):

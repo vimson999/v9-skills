@@ -69,6 +69,8 @@
 
 按 image-storyboard-contract 写入同一个 `STORYBOARD.md`：全局视觉规范、逐镜可读表和一份规范 JSON 区块。完整提示词在该 JSON 中；用户要单独复制时可以另行展示，但保持逐字一致。不另建一套可独立编辑的视觉计划。
 
+修订以完整镜头为单位，执行 [跨字段修订与复查](image-plan-review.md)：实际读取已保存的 JSON，对齐画面意图、素材需求、主/备用提示词、上屏文字、编排及可读表；修复后重新读取问题字段，再生成审查结论。不能只更换提示词或新增“已检查”说明而保留已知矛盾。
+
 运行 `python3 scripts/image_timeline.py validate STORYBOARD.md --srt INPUT.srt`，无时间方案不传 SRT。用户/项目选择了预设时，按 [配置校验约定](director-presets.md) 传入原始选择的 ID，不能只运行不检查预设的兼容命令。修复结构、时间与配置声明错误，再按 [交付前审查](image-plan-review.md) 对实际屏幕文字、主/备用提示词和编排进行语义审查并修订。脚本的 checks/notChecked 表示检查范围，不验证审美、事实、提示词是否忠实执行了配置或听觉同步。
 
 交付时分别说明：导演方案完成程度、素材是否已选定/待制作、时间哪些未核验。`status=ready` 只表示方案可交接，不表示已生图、入库或成片。有临时风格、估计切点、待查素材或关键差异时保持 planned 并列出 openQuestions。

@@ -185,11 +185,33 @@ def validate_plan(plan, cues=None, *, directing_profile=None, visual_style=None)
     return errors
 
 
+def review_packet(plan, shot_ids=None):
+    """Expose canonical fields for an agent review, never a semantic pass verdict."""
+    errors = shape_errors(plan, json.loads(SCHEMA.read_text(encoding="utf-8")))
+    if errors:
+        raise ValueError("; ".join(errors))
+    selected = set(shot_ids or [])
+    missing = selected - {shot["id"] for shot in plan["shots"]}
+    if missing:
+        raise ValueError(f"Unknown shot IDs: {sorted(missing)}")
+    return {
+        "reviewStatus": "not_evaluated",
+        "scope": "selected_shots" if selected else "all_shots",
+        "profile": plan["profile"], "project": plan["project"],
+        "direction": plan.get("direction"), "style": plan["style"],
+        "timing": plan["timing"], "openQuestions": plan["openQuestions"],
+        "shots": [shot for shot in plan["shots"] if not selected or shot["id"] in selected],
+    }
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
     parse = sub.add_parser("parse")
     parse.add_argument("srt", type=Path)
+    review = sub.add_parser("review", help="Extract canonical fields for semantic review; does not judge them")
+    review.add_argument("storyboard", type=Path)
+    review.add_argument("--shot", action="append", help="Review a specific shot ID; repeat for a batch")
     validate = sub.add_parser("validate")
     validate.add_argument("storyboard", type=Path)
     validate.add_argument("--srt", type=Path)
@@ -200,6 +222,9 @@ def main(argv=None):
         if args.command == "parse":
             result = parse_srt(args.srt.read_text(encoding="utf-8-sig"))
             print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0
+        if args.command == "review":
+            print(json.dumps(review_packet(load_plan(args.storyboard), args.shot), ensure_ascii=False, indent=2))
             return 0
         cues = parse_srt(args.srt.read_text(encoding="utf-8-sig"))["cues"] if args.srt else None
         errors = validate_plan(load_plan(args.storyboard), cues,
