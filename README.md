@@ -50,12 +50,15 @@ python3 -m unittest discover -s tests -p 'test_image_*.py'
 
 可查看 [19 秒桌面整理分镜样例](tests/fixtures/image-director/STORYBOARD.md)：由独立执行者实际读取本 Skill 后产出，使用合成文案与候选元数据，仅验证策划交接；没有生成图片或视频。
 
+导演方案与画风可以独立配置：已提供「兼听研报」「中老年健康科普」两套表达方案，以及两套可替换的起始画风。查看 [配置目录与项目示例](presets/README.md)。配置随导演 Skill 分发，不新增题材 Skill；本次有效规则保存在项目分镜中。
+
 ## Object model
 
 - **Skill** — an independently triggerable, coherent capability.
 - **Router Skill** — selects the appropriate workflow or domain Skill.
 - **Workflow Skill** — sequences Skills and owns handoffs and stop conditions.
 - **Reference / Contract** — durable rules or formats read by a Skill.
+- **Preset** — reusable directing or visual-style configuration selected and overridden by a project; not a triggerable Skill.
 - **Script** — deterministic mechanical work that should not be reinvented in prose.
 - **Project Artifact** — state passed between stages of one production.
 

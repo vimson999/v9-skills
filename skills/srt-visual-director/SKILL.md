@@ -18,6 +18,8 @@ Both modes extend the same `STORYBOARD.md`. Image-only mode does not generate im
 
 ## Inputs and output
 
+For a named channel, directing profile, visual-style preset, or project `DIRECTOR.yaml`, read [`references/director-presets.md`](references/director-presets.md) and only the selected presets. Keep directing strategy, visual style, and project overrides separate. The bundled profiles include 兼听研报 and 中老年健康科普; neither is the universal default. Snapshot effective rules in the storyboard so later preset edits do not silently change existing projects.
+
 In general mode, consume a BRIEF plus narration text and a usable SRT. Use audio when available to understand pacing, but keep the SRT timestamps as the supplied timing baseline. Flag discrepancies instead of silently changing them. Produce or extend the project's `STORYBOARD.md`.
 
 ## Direction workflow

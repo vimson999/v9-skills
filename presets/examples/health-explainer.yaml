@@ -1,0 +1,12 @@
+# 示例输入：可复制为项目 DIRECTOR.yaml；已有参考图时填写真实可读取路径。
+director: srt-visual-director
+mode: image-only
+directing_profile: health-explainer
+visual_style: warm-life-illustration
+audience: 50岁以上中老年观众
+aspect_ratio: "9:16"
+reference_images: []
+overrides:
+  text: 高对比、大字、少字，关键词后期叠加
+  image_delivery: 每镜独立图片
+  character_consistency: 同一讲解人物保持外貌和服装一致，具体特征在本项目确定

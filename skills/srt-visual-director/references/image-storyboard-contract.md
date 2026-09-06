@@ -13,6 +13,7 @@ JSON 投影若由下游明确需要，可以从该区块提取，不作为第二
 | 对象 | 字段和语义 |
 |---|---|
 | 根 | profile=image-v1；project={id,title}；status=planned/ready |
+| direction（可选） | directingProfile/visualStyle 为实际读取配置的 {id,revision,source} 或 null；audience 为字符串或 null；overrides 为有效覆盖说明列表；resolvedRules 为展开的有效规则列表。详见 [配置规则](director-presets.md) |
 | timing | kind=srt/untimed；srtPath 真实路径或 null；startMs/endMs 为指定片段绝对毫秒或 null；audioDurationMs 已知实际音频总时长或 null |
 | style | aspectRatio 明确比例或 null；description 可执行风格；referenceRefs 真实参考来源列表；textPolicy；subtitleSafeArea；confirmed 布尔值 |
 | assetLibrary | status=not_provided/unavailable/searched；source 真正读取的清单/返回结果来源或 null；notes 搜索范围说明 |
@@ -24,7 +25,7 @@ JSON 投影若由下游明确需要，可以从该区块提取，不作为第二
 | usage | crop、motion、transition 为项目级编排描述；不回写公共素材 |
 | execution | 仅执行阶段需要，{renderer: remotion/hyperframes,pattern: ...}；规划时可省略 |
 
-所有表中列出的字段除 execution 外均需出现；没有值时按 schema 使用 null/空列表，不编造来源。
+所有表中列出的字段除 execution、direction 外均需出现；没有值时按 schema 使用 null/空列表，不编造来源。使用预设的新方案填写 direction；旧方案可以不包含此字段，仍兼容 image-v1。direction 一旦提供，其内部五个字段均需出现。
 
 timingBasis 为 cue_boundary/audio_verified/estimated/manual/untimed。estimated、manual、audio_verified 需在 timingNote 解释依据；audio_verified 必须真实核验过，脚本无法证明此点。
 

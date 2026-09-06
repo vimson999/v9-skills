@@ -1,0 +1,11 @@
+# 示例输入：可复制为项目 DIRECTOR.yaml；选择、画幅和受众均可修改。
+director: srt-visual-director
+mode: image-only
+directing_profile: jianting-research
+visual_style: editorial-minimal
+audience: 希望比较多家投行观点的普通财经观众
+aspect_ratio: "16:9"
+reference_images: []
+overrides:
+  text: 机构名、关键数字、期间与口径后期准确排版
+  image_delivery: 每镜独立图片，精确图表单独设计
