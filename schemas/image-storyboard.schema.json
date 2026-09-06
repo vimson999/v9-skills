@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://v9-skills.local/schemas/image-storyboard.schema.json",
+  "title": "V9 image-only storyboard planning profile",
+  "$ref": "../skills/srt-visual-director/references/image-storyboard.schema.json"
+}

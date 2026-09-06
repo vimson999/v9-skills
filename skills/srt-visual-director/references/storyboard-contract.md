@@ -2,6 +2,8 @@
 
 `STORYBOARD.md` is the canonical plan-layer artifact for a video project. It can be extended through the production loop, but a later stage must edit the same file rather than create a second storyboard.
 
+For independent-image planning, use the additive [`image-v1` profile](image-storyboard-contract.md). Its timing, asset requests, and prompts live in this same artifact. Untimed drafts and deferred renderer assignments are allowed only in that planning profile; the existing general/executable projection below is unchanged. Do not label a planning-ready image profile as render-ready.
+
 ## Required project sections
 
 ```markdown

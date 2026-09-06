@@ -10,7 +10,7 @@ This repository starts with the video system because it is the first concrete us
 | --- | --- | --- |
 | [`skills/video`](skills/video) | Router Skill | Select the next video workflow or domain Skill |
 | [`skills/report-video`](skills/report-video) | Workflow Skill | Orchestrate report production end to end |
-| [`skills/srt-visual-director`](skills/srt-visual-director) | Domain Skill | Turn timed narration into semantic beats and a storyboard |
+| [`skills/srt-visual-director`](skills/srt-visual-director) | Domain Skill | Plan general storyboards or independent narration-matched images with asset requests and prompts |
 | [`skills/media-assets`](skills/media-assets) | Domain Skill | Inventory, select, govern, and track reusable media |
 | [`skills/remotion`](skills/remotion) | Engine Skill | Implement assigned scenes with React and frame-based rendering |
 | [`skills/hyperframes`](skills/hyperframes) | Engine Skill | Implement assigned scenes with HTML/CSS/GSAP motion design |
@@ -31,6 +31,24 @@ BRIEF → timed narration (audio + SRT) → STORYBOARD.md
 ```
 
 `STORYBOARD.md` is the single visual plan-layer artifact. It records narrative beats, visual intent, candidate assets, timing, and the renderer for each executable shot. Renderer source code does not belong in the storyboard, and a second `execution-plan.json` is not introduced.
+
+## 图片视觉导演：第一版
+
+`srt-visual-director` 的 [image-only 模式](skills/srt-visual-director/references/image-only-workflow.md) 支持文案/SRT → 独立图片分镜 → 已有素材引用或缺图/编辑提示词。它不调用生图 API，不入库，不渲染视频。公共素材库独立于项目，由 `media-assets` 管理；导演只记录画面需求、候选和项目用法。
+
+示例：使用 `$srt-visual-director`，按 image-only 模式处理我的文案和 SRT，参考提供的画风与素材清单，输出 STORYBOARD.md。每镜是一张独立图片；先复用合适素材，缺图给完整提示词。
+
+没有 SRT 时可交付明确无时间的草案；风格未确认或切点为估计时保留待办。图片模式使用 [image-v1 契约](skills/srt-visual-director/references/image-storyboard-contract.md)，结构化数据放在同一个 STORYBOARD.md 的 JSON 区块中。renderer 在执行交接时指定，原通用分镜契约保持有效。
+
+```bash
+python3 skills/srt-visual-director/scripts/image_timeline.py parse narration.srt
+python3 skills/srt-visual-director/scripts/image_timeline.py validate STORYBOARD.md --srt narration.srt
+python3 -m unittest discover -s tests -p 'test_image_*.py'
+```
+
+时间脚本使用 Python 3 标准库，校验连续覆盖、字幕引用和素材决策等交接约束；审美、真实音画同步与生图效果仍需实际样片验证。
+
+可查看 [19 秒桌面整理分镜样例](tests/fixtures/image-director/STORYBOARD.md)：由独立执行者实际读取本 Skill 后产出，使用合成文案与候选元数据，仅验证策划交接；没有生成图片或视频。
 
 ## Object model
 

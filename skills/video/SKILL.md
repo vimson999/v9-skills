@@ -15,6 +15,7 @@ Use this Skill when a request concerns planning, creating, editing, rendering, o
 | --- | --- |
 | Produce a report video from a brief, narration, report, or SRT | [`report-video`](../report-video/SKILL.md) |
 | Turn narration and SRT timing into beats or a storyboard | [`srt-visual-director`](../srt-visual-director/SKILL.md) |
+| Plan independent images, reuse candidates, or missing-image prompts for narration | [`srt-visual-director` image-only mode](../srt-visual-director/references/image-only-workflow.md) |
 | Inventory, find, select, license, or track media | [`media-assets`](../media-assets/SKILL.md) |
 | Implement a shot assigned to React/components/frames | [`remotion`](../remotion/SKILL.md) |
 | Implement a shot assigned to HTML/CSS/GSAP motion design | [`hyperframes`](../hyperframes/SKILL.md) |

@@ -1,0 +1,8 @@
+{
+  "fixture": "Synthetic metadata for local validation, not a real asset library",
+  "source": "fixture-catalog",
+  "candidates": [
+    {"id": "asset-desk-001", "description": "浅蓝衬衫人物坐在杂乱书桌前寻找笔", "style": "暖白底深灰线条插画", "orientation": "portrait", "path": null, "previewAvailable": false, "licenseStatus": "unverified"},
+    {"id": "asset-park-001", "description": "公园散步场景", "style": "写实摄影", "orientation": "landscape", "path": null, "previewAvailable": false, "licenseStatus": "confirmed"}
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 name: srt-visual-director
-description: Convert timed narration and SRT cues into semantic beats, visual intent, and a renderer-aware STORYBOARD.md without implementing renderer source code.
+description: Design visual storyboards from narration and SRT. Use image-only mode for 图片视觉导演、文案配图、独立图片轮播、素材复用与缺图提示词; retain general mode for mixed-media renderer-aware storyboards. Does not generate images or render video.
 metadata:
   short-description: Direct SRT into a visual storyboard
 ---
@@ -9,9 +9,16 @@ metadata:
 
 Use this Skill when narration, script, and SRT timing need to become a visual plan. Read [`references/storyboard-contract.md`](references/storyboard-contract.md) and, for factual or financial claims, [`references/evidence-rules.md`](references/evidence-rules.md) before editing the storyboard.
 
+## Choose the mode
+
+- **Image-only:** When the user wants independent still images matched to narration, read [`references/image-only-workflow.md`](references/image-only-workflow.md) and [`references/image-storyboard-contract.md`](references/image-storyboard-contract.md). This mode produces image designs, existing-asset references, missing-image prompts, and timing. Renderer assignment is deferred until implementation is requested. It can also produce an explicitly untimed draft from a script alone.
+- **General:** For mixed media, information animation, or already assigned engines, follow the existing workflow below. Do not replace an existing project's artifact/profile without an explicit migration need.
+
+Both modes extend the same `STORYBOARD.md`. Image-only mode does not generate images, mutate the shared asset library, or implement a renderer. Use the user's existing choices and authorization; do not require a fresh approval at every planning step.
+
 ## Inputs and output
 
-Consume a BRIEF plus narration text and a usable SRT. Use audio when available to understand pacing, but keep the SRT timestamps as timing truth. Produce or extend the project's `STORYBOARD.md`.
+In general mode, consume a BRIEF plus narration text and a usable SRT. Use audio when available to understand pacing, but keep the SRT timestamps as the supplied timing baseline. Flag discrepancies instead of silently changing them. Produce or extend the project's `STORYBOARD.md`.
 
 ## Direction workflow
 
