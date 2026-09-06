@@ -1,7 +1,9 @@
 """Deterministic handoff checks using synthetic narration, not a quality benchmark."""
 
 import copy
+import contextlib
 import importlib.util
+import io
 import json
 from pathlib import Path
 import tempfile
@@ -92,6 +94,38 @@ class PlanTests(unittest.TestCase):
 
     def test_actual_srt_required(self):
         self.assertTrue(timeline.validate_plan(self.plan))
+
+    def test_requested_presets_require_matching_snapshot(self):
+        requested = dict(directing_profile="health-explainer", visual_style="warm-life-illustration")
+        self.assertTrue(timeline.validate_plan(self.plan, self.cues, **requested))
+        self.plan["direction"] = {
+            "directingProfile": {"id": "health-explainer", "revision": 1, "source": "preset.yaml"},
+            "visualStyle": {"id": "warm-life-illustration", "revision": 1, "source": "style.yaml"},
+            "audience": "成年人", "overrides": [], "resolvedRules": ["保持项目画风和人物设定"]}
+        self.assertEqual(timeline.validate_plan(self.plan, self.cues, **requested), [])
+        for key in ("directingProfile", "visualStyle"):
+            original = self.plan["direction"][key]
+            for replacement in (None, dict(original, id="different-preset")):
+                with self.subTest(key=key, replacement=replacement):
+                    self.plan["direction"][key] = replacement
+                    self.assertTrue(timeline.validate_plan(self.plan, self.cues, **requested))
+            self.plan["direction"][key] = original
+
+    def test_cli_checks_requested_presets_and_reports_limits(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "STORYBOARD.json"
+            path.write_text(json.dumps(self.plan))
+            args = ["validate", str(path), "--srt", str(FIXTURES / "narration.srt")]
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = timeline.main(args + ["--visual-style", "warm-life-illustration"])
+            result = json.loads(out.getvalue())
+            self.assertEqual(code, 1)
+            self.assertFalse(result["valid"])
+            self.assertIn("visual_semantics", result["notChecked"])
+            # Older, unconfigured projects still work without preset expectations.
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(timeline.main(args), 0)
 
     def test_wrong_missing_duplicate_cue_references(self):
         for refs in ([], ["srt-999"], ["srt-001", "srt-001"]):

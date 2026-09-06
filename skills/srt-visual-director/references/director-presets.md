@@ -54,6 +54,8 @@ image-v1 在唯一的 STORYBOARD.md JSON 内使用可选 `direction` 字段记�
 
 将有效画风完整展开到现有 `style.description`、`textPolicy`、`subtitleSafeArea`；referenceRefs 只记实际查看过的风格参考，未查看来源列在 openQuestions。style 不依赖未来重新读取预设即可理解。逐图 prompt 也展开相应画风、稳定人物特征、比例与留白，不能只写 ID 或“同上”。按需应用 profile 内容要求，不要把整份配置机械粘贴到每条生图提示词。
 
+referenceRefs 专用于实际查看过的参考图片来源；预设名称、配置路径和“用户指定某画风”等声明放在 direction，不充当图片参考。改变预设的媒介、配色或安全区等有效规则时，写入 overrides 并交代来源于用户选择还是临时判断，不能只保留原 ID 而静默换画风。
+
 视觉配置中的 motion 是可覆盖的编排建议，按每镜实际构图写入 image.usage.motion；不要把后期推近、平移误写成要求生图模型生成视频。
 
 兼听研报的机构、单位、时间范围、实际/预测标识应进入图表 designBrief 或后期标签；健康方案的动作部位、视角与步骤应进入 visualIntent/assetNeed/prompt。内部叙事标签仍留在 narrativeBeat，不能因此变成屏幕文字。
@@ -61,3 +63,16 @@ image-v1 在唯一的 STORYBOARD.md JSON 内使用可选 `direction` 字段记�
 通用 general 模式也可读取这些配置，将选项、版本与有效规则写入 STORYBOARD.md 的说明部分，沿用原有 JSON schema，不向旧 JSON 添加 direction。
 
 修改公共预设不自动改写已产出的项目；用户要求换风格时更新同一分镜的 style、direction、逐镜素材需求与提示词，并重新判断现有素材能否复用。裁切、字幕、运动属于本项目，不能改写公共素材身份。
+
+## 按请求校验配置声明
+
+使用预设的新分镜必须包含 direction。对 image-v1 校验时，从原始用户要求/项目配置取得已选择的 ID，作为独立期望传给脚本；不能从结果 JSON 中反向取 ID 来证明自己选对了。
+
+```bash
+python3 scripts/image_timeline.py validate STORYBOARD.md --srt INPUT.srt \
+  --directing-profile health-explainer --visual-style warm-life-illustration
+```
+
+上面是命令形式示例，实际 ID 按本项目替换。只选一个维度就只传相应参数；无 SRT 则省略 --srt；自定义配置传实际读取的 id。选择的文件不可读取时，不伪造其声明，报告缺失并保留未完成草案。
+
+指定 ID 后，缺少 direction、配置声明为 null 或 ID 不匹配均校验失败。未选预设的旧项目仍可使用不带参数的兼容校验。此检查只验证声明与期望一致，无法证明文件确实被读取或视觉规则实际生效；后者按 [语义审查](image-plan-review.md) 对照原文件与最终提示词核查。

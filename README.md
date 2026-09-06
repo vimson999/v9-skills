@@ -43,10 +43,15 @@ BRIEF → timed narration (audio + SRT) → STORYBOARD.md
 ```bash
 python3 skills/srt-visual-director/scripts/image_timeline.py parse narration.srt
 python3 skills/srt-visual-director/scripts/image_timeline.py validate STORYBOARD.md --srt narration.srt
+# 选择过预设的项目还需按原始请求传入预设 ID：
+python3 skills/srt-visual-director/scripts/image_timeline.py validate STORYBOARD.md --srt narration.srt \
+  --directing-profile health-explainer --visual-style warm-life-illustration
 python3 -m unittest discover -s tests -p 'test_image_*.py'
 ```
 
 时间脚本使用 Python 3 标准库，校验连续覆盖、字幕引用和素材决策等交接约束；审美、真实音画同步与生图效果仍需实际样片验证。
+
+交付前执行 [图片分镜语义审查](skills/srt-visual-director/references/image-plan-review.md)，修复文字分层、主/备用方案连续性、静态画面表达与配置漂移。脚本返回检查范围及未检查项目；`valid=true` 不能代替语义审查或样片验收。
 
 可查看 [19 秒桌面整理分镜样例](tests/fixtures/image-director/STORYBOARD.md)：由独立执行者实际读取本 Skill 后产出，使用合成文案与候选元数据，仅验证策划交接；没有生成图片或视频。
 

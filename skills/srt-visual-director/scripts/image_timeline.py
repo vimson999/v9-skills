@@ -100,10 +100,17 @@ def shape_errors(value, schema, at="$", errors=None):
     return errors
 
 
-def validate_plan(plan, cues=None):
+def validate_plan(plan, cues=None, *, directing_profile=None, visual_style=None):
     errors = shape_errors(plan, json.loads(SCHEMA.read_text(encoding="utf-8")))
     if errors:
         return errors
+    # Expectations come from the request, not from the generated plan itself.
+    # Matching metadata does not prove the preset was read or applied faithfully.
+    for key, expected in (("directingProfile", directing_profile), ("visualStyle", visual_style)):
+        if expected is not None:
+            selected = plan.get("direction", {}).get(key)
+            if not selected or selected["id"] != expected:
+                errors.append(f"direction.{key}: requested preset {expected!r} needs a matching snapshot")
     timing, shots = plan["timing"], plan["shots"]
     timed = timing["kind"] == "srt"
     ready = plan["status"] == "ready"
@@ -186,6 +193,8 @@ def main(argv=None):
     validate = sub.add_parser("validate")
     validate.add_argument("storyboard", type=Path)
     validate.add_argument("--srt", type=Path)
+    validate.add_argument("--directing-profile", help="Expected directing preset ID from the user/project request")
+    validate.add_argument("--visual-style", help="Expected visual preset ID from the user/project request")
     args = parser.parse_args(argv)
     try:
         if args.command == "parse":
@@ -193,8 +202,14 @@ def main(argv=None):
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 0
         cues = parse_srt(args.srt.read_text(encoding="utf-8-sig"))["cues"] if args.srt else None
-        errors = validate_plan(load_plan(args.storyboard), cues)
-        print(json.dumps({"valid": not errors, "errors": errors}, ensure_ascii=False, indent=2))
+        errors = validate_plan(load_plan(args.storyboard), cues,
+                               directing_profile=args.directing_profile, visual_style=args.visual_style)
+        checks = ["schema", "timing", "asset_handoff"]
+        if args.directing_profile is not None or args.visual_style is not None:
+            checks.append("requested_preset_metadata")
+        print(json.dumps({"valid": not errors, "errors": errors, "checks": checks,
+                          "notChecked": ["preset_rule_fidelity", "visual_semantics", "image_quality", "audio_sync"]},
+                         ensure_ascii=False, indent=2))
         return 1 if errors else 0
     except (OSError, ValueError) as exc:
         print(json.dumps({"valid": False, "errors": [str(exc)]}, ensure_ascii=False), file=sys.stderr)

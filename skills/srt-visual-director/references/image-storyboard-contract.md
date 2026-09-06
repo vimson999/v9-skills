@@ -38,6 +38,7 @@ reuse/edit 的 assetRef 必须 viewed=true 且 useStatus=confirmed。其余 acti
 - cue_boundary 的切点取真实字幕边界或目标片段边界；内部估计切点用 estimated，不能仅用精确数字伪装真实对齐。
 - 无 SRT 草案使用 kind=untimed，所有时间与 srtPath=null、voiceoverRefs=[]、timingBasis=untimed、status=planned。
 - ready 要求已确认风格和比例、没有 openQuestions、没有 estimated 或 search_pending；ready 表示可制作，不表示图片/视频已完成。
+- ready 还要求完成 [交付前语义审查](image-plan-review.md)，修复已发现的配置、人物连续性及表达冲突。脚本不能证明这项审查已实际执行；使用预设时须带原始请求 ID 进行 [配置声明检查](director-presets.md)。
 - 不要求生成前存在真实素材 ID。后续制作、检查、入库完成后，由素材能力返回真实记录，再将 action 改为 reuse 并保存制作来源记录于素材库。
 
 ## 与既有执行契约的交接

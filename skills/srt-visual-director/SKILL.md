@@ -16,6 +16,8 @@ Use this Skill when narration, script, and SRT timing need to become a visual pl
 
 Both modes extend the same `STORYBOARD.md`. Image-only mode does not generate images, mutate the shared asset library, or implement a renderer. Use the user's existing choices and authorization; do not require a fresh approval at every planning step.
 
+Before handing off image-only output, apply [`references/image-plan-review.md`](references/image-plan-review.md) to the actual plan and prompts, repair supported issues, and distinguish script validation from semantic review. When presets were requested, validate their IDs against the original request using the flags in the preset reference; do not infer validation expectations from the generated plan.
+
 ## Inputs and output
 
 For a named channel, directing profile, visual-style preset, or project `DIRECTOR.yaml`, read [`references/director-presets.md`](references/director-presets.md) and only the selected presets. Keep directing strategy, visual style, and project overrides separate. The bundled profiles include 兼听研报 and 中老年健康科普; neither is the universal default. Snapshot effective rules in the storyboard so later preset edits do not silently change existing projects.
