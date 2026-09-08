@@ -1,5 +1,5 @@
 id: jianting-research
-revision: 1
+revision: 2
 kind: directing
 name: 兼听研报
 purpose: 同一标的多家机构观点对比，让观众理解共识、分歧及其依据。
@@ -15,6 +15,32 @@ rules:
   - 同一机构在本项目中的位置和视觉标识保持一致；用文字或形状辅助区分，不仅靠红绿颜色。
   - 概念插画表达现金流、投入、竞争等关系；不把虚构工厂、人物或报告页伪装成真实证据。
   - 并列观点不等于强行制造评级分歧；不要把估值目标画成必然上涨，不加入口播中没有的推荐结论。
+variants:
+  high_background_podcast:
+    activation: 仅当用户本次或已确认项目配置明确请求 high_background_podcast 时启用；泛称财经、选择 jianting-research 或 image-only 均不自动启用。
+    background_video:
+      coverage_starting_target: 0.90
+      coverage_definition: 以构图总帧中含有效背景视频层的帧占比计算；这是覆盖率，不是独立源素材时长，也不等于感知可见度。
+      holdouts: 纯数据或证据画面在可读性或来源忠实度需要时可以保留，不强制铺设背景视频。
+    reporting:
+      background_coverage: 单独报告有效背景视频层覆盖的构图帧占比。
+      unique_usable_footage: 单独报告独立可用素材时长；它是诊断指标，不是制作门槛。
+      reused_assets_and_treatments: 单独记录复用的素材及每次采用的处理方式。
+    reuse:
+      policy: 允许编辑诚实且符合语义的变化复用，不把同一来源包装成多个独立证据。
+      treatments:
+        - trim: 调整素材入点、出点或选用片段。
+        - crop: 根据构图与主体重新裁切。
+        - scale: 按层级和画幅调整缩放。
+        - speed: 在不歪曲事实或动作含义时调整速度。
+        - opacity: 按画面层级调整素材透明度。
+        - layout: 改变图层位置、分栏或前后景关系。
+        - spacing: 调整留白以及素材与信息层的间距。
+    compositing_controls:
+      asset_opacity:
+        policy: 背景素材层透明度独立可调，按项目与镜头判断，不设通用固定数值区间。
+      overlay_alpha:
+        policy: 覆盖层透明度独立可调，按项目与镜头判断，不设通用固定数值区间。
 visual_patterns:
   - 预期差：同口径实际值与预期值并列，解释差值来源。
   - 机构比较：固定位置逐项显示观点；竖屏优先纵向卡片，复杂表格拆成多个独立画面。
