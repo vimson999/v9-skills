@@ -24,7 +24,9 @@ Treat revisions as whole-shot changes: reconcile visual intent, asset requiremen
 
 For a named channel, directing profile, visual-style preset, or project `DIRECTOR.yaml`, read [`references/director-presets.md`](references/director-presets.md) and only the selected presets. Keep directing strategy, visual style, and project overrides separate. The bundled profiles include 兼听研报 and 中老年健康科普; neither is the universal default. Snapshot effective rules in the storyboard so later preset edits do not silently change existing projects.
 
-In general mode, consume a BRIEF plus narration text and a usable SRT. Use audio when available to understand pacing, but keep the SRT timestamps as the supplied timing baseline. Flag discrepancies instead of silently changing them. Produce or extend the project's `STORYBOARD.md`.
+When directly invoked with a usable SRT but no existing project, run the [`report-video`](../report-video/SKILL.md) initializer at `skills/report-video/scripts/init_project.py` first, then continue director planning in the created project. The agent performs initialization; do not ask the user to run the command. Initialization does not move asset resolution or rendering into this Skill: keep those duties with `media-assets`, the assigned renderer, and `render-reliability`.
+
+In general mode, consume narration text and a usable SRT, plus BRIEF details when they are available. A BRIEF is optional for an SRT-only project and may be refined after initialization. Use audio when available to understand pacing, but keep the SRT timestamps as the supplied timing baseline. Flag discrepancies instead of silently changing them. Produce or extend the project's `STORYBOARD.md`.
 
 ## Direction workflow
 

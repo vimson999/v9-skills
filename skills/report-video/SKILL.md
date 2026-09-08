@@ -22,13 +22,14 @@ The artifact shapes are documented in the repository `schemas/` directory and li
 
 ## Ordered workflow
 
-1. Establish the BRIEF and identify the source material, audience, language, aspect ratio, and publication constraints.
-2. Confirm the timed narration inputs. For narration-led work, SRT timestamps are the timing truth; align or produce audio and SRT before visual planning.
-3. Invoke [`srt-visual-director`](../srt-visual-director/SKILL.md) to group cues into semantic visual units and extend `STORYBOARD.md` with story and visual design.
-4. Invoke [`media-assets`](../media-assets/SKILL.md) to resolve candidates and write provenance, license, and reuse decisions into `ASSET_MANIFEST.json`.
-5. Check that every executable storyboard shot has `execution.renderer` set to `remotion` or `hyperframes`. Keep this assignment in the storyboard; do not create a parallel execution plan.
-6. Route each assigned shot to [`remotion`](../remotion/SKILL.md) or [`hyperframes`](../hyperframes/SKILL.md). The workflow owns the master timeline and cross-engine composition.
-7. Run [`render-reliability`](../render-reliability/SKILL.md) against the produced files and write `RENDER_OUTPUT.json`.
+1. When a new request supplies a usable SRT but no existing project, first run the internal initializer: `python3 skills/report-video/scripts/init_project.py <srt> --factory-root <factory-root>` plus any supplied project options. Continue from the path it prints. The agent runs this command; do not ask the user to run it. Initialize before asking for optional brief details.
+2. Establish or refine the BRIEF and identify the source material, audience, language, aspect ratio, and publication constraints. Do not block an SRT-only initialization on optional brief details.
+3. Confirm the timed narration inputs. For narration-led work, SRT timestamps are the timing truth; align or produce audio and SRT before visual planning.
+4. Invoke [`srt-visual-director`](../srt-visual-director/SKILL.md) to group cues into semantic visual units and extend `STORYBOARD.md` with story and visual design.
+5. Invoke [`media-assets`](../media-assets/SKILL.md) to resolve candidates and write provenance, license, and reuse decisions into `ASSET_MANIFEST.json`.
+6. Check that every executable storyboard shot has `execution.renderer` set to `remotion` or `hyperframes`. Keep this assignment in the storyboard; do not create a parallel execution plan.
+7. Route each assigned shot to [`remotion`](../remotion/SKILL.md) or [`hyperframes`](../hyperframes/SKILL.md). The workflow owns the master timeline and cross-engine composition.
+8. Run [`render-reliability`](../render-reliability/SKILL.md) against the produced files and write `RENDER_OUTPUT.json`.
 
 ## Stop conditions
 
