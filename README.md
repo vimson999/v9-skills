@@ -6,31 +6,37 @@
 
 This repository starts with the video system because it is the first concrete use case. The architecture is intentionally flat: conceptual roles such as capability, workflow, router, and engine are expressed in each Skill's responsibility, not in four physical parent directories.
 
-| Path | Role | Responsibility |
+| Path | Role | Responsibility and internal owner command |
 | --- | --- | --- |
 | [`skills/video`](skills/video) | Router Skill | Select the next video workflow or domain Skill |
-| [`skills/report-video`](skills/report-video) | Workflow Skill | Orchestrate report production end to end |
+| [`skills/report-video`](skills/report-video) | Workflow Skill | Orchestrate report production end to end.<br>`python3 skills/report-video/scripts/init_project.py INPUT.srt [--factory-root FACTORY_ROOT]` |
 | [`skills/srt-visual-director`](skills/srt-visual-director) | Domain Skill | Plan general storyboards or independent narration-matched images with asset requests and prompts |
-| [`skills/media-assets`](skills/media-assets) | Domain Skill | Inventory, select, govern, and track reusable media |
+| [`skills/media-assets`](skills/media-assets) | Domain Skill | Inventory, select, govern, and track reusable media.<br>`python3 skills/media-assets/scripts/intake_assets.py --library-root ASSET_LIBRARY --project-id PROJECT_ID [--source SOURCE]` |
 | [`skills/remotion`](skills/remotion) | Engine Skill | Implement assigned scenes with React and frame-based rendering |
 | [`skills/hyperframes`](skills/hyperframes) | Engine Skill | Implement assigned scenes with HTML/CSS/GSAP motion design |
 | [`skills/render-reliability`](skills/render-reliability) | Verification Skill | Check deterministic, complete, usable render outputs |
 
+The agent runs these internal commands; users provide the SRT or assets and the destination context. The initializer creates `projects/<project-id>/`, and its factory root defaults to the current directory when `--factory-root` is omitted.
+
 ## Artifact flow
 
 ```text
-BRIEF → timed narration (audio + SRT) → STORYBOARD.md
-                                      ├→ ASSET_MANIFEST.json
-                                      └→ per-shot execution.renderer
-                                           ↓
-                                  Remotion / HyperFrames
-                                           ↓
-                                  RENDER_OUTPUT.json + video
-                                           ↓
-                                  render-reliability
+usable SRT → initialized project → optional BRIEF refinement
+                                      ↓
+                        timed narration (audio + SRT)
+                                      ↓
+                                STORYBOARD.md
+                                ├→ ASSET_MANIFEST.json
+                                └→ per-shot execution.renderer
+                                     ↓
+                            Remotion / HyperFrames
+                                     ↓
+                            RENDER_OUTPUT.json + video
+                                     ↓
+                            render-reliability
 ```
 
-`STORYBOARD.md` is the single visual plan-layer artifact. It records narrative beats, visual intent, candidate assets, timing, and the renderer for each executable shot. Renderer source code does not belong in the storyboard, and a second `execution-plan.json` is not introduced.
+A usable SRT can initialize a project before a BRIEF exists; BRIEF details may be added or refined afterward. `STORYBOARD.md` is the single visual plan-layer artifact. It records narrative beats, visual intent, candidate assets, timing, and the renderer for each executable shot. Renderer source code does not belong in the storyboard, and a second `execution-plan.json` is not introduced.
 
 ## 图片视觉导演：第一版
 
@@ -59,6 +65,17 @@ python3 -m unittest discover -s tests -p 'test_image_*.py'
 
 导演方案与画风可以独立配置：已提供「兼听研报」「中老年健康科普」两套表达方案，以及两套可替换的起始画风。查看 [配置目录与项目示例](presets/README.md)。配置随导演 Skill 分发，不新增题材 Skill；本次有效规则保存在项目分镜中。
 
+`jianting-research` 下的 `high_background_podcast` 仅在项目明确选择时启用。90% 背景视频覆盖率是起始目标，独立可用素材时长不是制作门槛；背景覆盖、素材复用与处理、可见度控制仍需分别报告。
+
+## `srt-v1` migration
+
+[`vimson999/srt-v1`](https://github.com/vimson999/srt-v1) was audited, and its capabilities were re-homed in existing modular Skills rather than copied wholesale:
+
+- SRT-only project initialization belongs to [`report-video`](skills/report-video).
+- Shared-library intake and catalog rebuilding belong to [`media-assets`](skills/media-assets).
+- The explicit finance high-background variant belongs to the `jianting-research` preset under [`srt-visual-director`](skills/srt-visual-director).
+- Segmented render recovery remains under the current [`report-video`](skills/report-video), [`remotion`](skills/remotion), and [`render-reliability`](skills/render-reliability) ownership. Its baseline and forward decision scenarios passed, so no duplicate legacy reference was added; those evaluations did not run a real long render.
+
 ## Object model
 
 - **Skill** — an independently triggerable, coherent capability.
@@ -78,4 +95,4 @@ python3 -m unittest discover -s tests -p 'test_image_*.py'
 
 ## Deliberate non-goals for this phase
 
-`asset-policy`, `technical-director`, `storyboard`, `shot-designer`, `health-video`, and `book-video` are not separate Skills yet. They become candidates only after repeated independent use or after an audit demonstrates a real boundary. The next migration step is to audit an existing `srt-visual-director` implementation against the current contracts.
+`asset-policy`, `technical-director`, `storyboard`, `shot-designer`, `health-video`, and `book-video` are not separate Skills yet. They become candidates only after repeated independent use or after an audit demonstrates a real boundary. The `srt-v1` capability audit and modular migration are complete; the remaining boundary is validation with real projects and samples. Repository scripts use only the Python standard library, but image quality, generated images, paid API behavior, and full video render quality still require that real-world validation.
