@@ -7,7 +7,7 @@ metadata:
 
 # Media Assets
 
-Use this Skill when a project needs an asset inventory, candidate selection, source tracking, licensing state, or reuse accounting. Read [`references/asset-manifest-contract.md`](references/asset-manifest-contract.md), [`references/selection-policy.md`](references/selection-policy.md), and [`references/provenance-policy.md`](references/provenance-policy.md) for the relevant operation.
+Use this Skill when a project needs an asset inventory, candidate selection, source tracking, licensing state, or reuse accounting. Read [`references/asset-manifest-contract.md`](references/asset-manifest-contract.md), [`references/selection-policy.md`](references/selection-policy.md), and [`references/provenance-policy.md`](references/provenance-policy.md) for the relevant operation. When a shared library, inbox, catalog, or asset-ready handoff is involved, also read and follow [`references/shared-library-workflow.md`](references/shared-library-workflow.md).
 
 ## Inputs and output
 
@@ -21,8 +21,11 @@ Consume a project's storyboard shot intents, candidate ids or search requirement
 4. Record the selected asset id and any meaningful reason or warning in the manifest or project notes.
 5. Keep uncertain identity, unverified license, missing source, and unavailable files explicit. Let the workflow decide whether a warning blocks publication or is limited to internal preview.
 
+When the user says shared assets are ready, run the shared-library intake yourself. The user supplies files; the agent owns hashing, copying, catalog rebuilding, and the intake summary.
+
 ## Boundaries
 
 - This Skill manages the media decision and record; it does not rewrite the narrative or choose a renderer.
 - A filename, search-result title, or visual resemblance is not proof of identity.
 - Generated or illustrative media must not be represented as an authentic source document or as evidence about an organization it does not depict.
+- Keep selection status independent from provenance and license status.
