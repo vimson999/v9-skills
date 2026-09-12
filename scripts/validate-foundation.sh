@@ -6,6 +6,7 @@ repo_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 
 skills=(
   video
+  multi-report-video-script
   report-video
   srt-visual-director
   media-assets

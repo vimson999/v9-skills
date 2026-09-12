@@ -13,6 +13,7 @@ Use this Skill when a request concerns planning, creating, editing, rendering, o
 
 | Request or current artifact | Route to |
 | --- | --- |
+| Compare multiple investment-bank reports, build a Debate Map, or write a 兼听研报 TTS script | [`multi-report-video-script`](../multi-report-video-script/SKILL.md) |
 | Produce a report video from a brief, narration, report, or SRT | [`report-video`](../report-video/SKILL.md) |
 | Turn narration and SRT timing into beats or a storyboard | [`srt-visual-director`](../srt-visual-director/SKILL.md) |
 | Plan independent images, reuse candidates, or missing-image prompts for narration | [`srt-visual-director` image-only mode](../srt-visual-director/references/image-only-workflow.md) |
@@ -23,7 +24,7 @@ Use this Skill when a request concerns planning, creating, editing, rendering, o
 
 ## Routing rules
 
-1. Prefer an existing artifact over reconstructing state from a prompt. The main handoff artifacts are BRIEF, timed narration (audio + SRT), `STORYBOARD.md`, `ASSET_MANIFEST.json`, and `RENDER_OUTPUT.json`.
+1. Prefer an existing artifact over reconstructing state from a prompt. The main handoff artifacts are BRIEF, Debate Map, approved narration, timed narration (audio + SRT), `STORYBOARD.md`, `ASSET_MANIFEST.json`, and `RENDER_OUTPUT.json`.
 2. For a narration-led deliverable, route through the storyboard before engine implementation unless the user explicitly asks for an isolated engine experiment.
 3. Do not route asset governance to an engine Skill, and do not route renderer implementation to the director Skill.
 4. If a request is ambiguous between a full workflow and a single stage, ask one question that changes the route. Do not load every Skill speculatively.

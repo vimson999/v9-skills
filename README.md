@@ -9,6 +9,7 @@ This repository starts with the video system because it is the first concrete us
 | Path | Role | Responsibility and internal owner command |
 | --- | --- | --- |
 | [`skills/video`](skills/video) | Router Skill | Select the next video workflow or domain Skill |
+| [`skills/multi-report-video-script`](skills/multi-report-video-script) | Prompt Skill | Build a multi-bank Debate Map and TTS-ready finance script |
 | [`skills/report-video`](skills/report-video) | Workflow Skill | Orchestrate report production end to end.<br>`python3 skills/report-video/scripts/init_project.py INPUT.srt [--factory-root FACTORY_ROOT]` |
 | [`skills/srt-visual-director`](skills/srt-visual-director) | Domain Skill | Plan general storyboards or independent narration-matched images with asset requests and prompts |
 | [`skills/media-assets`](skills/media-assets) | Domain Skill | Inventory, select, govern, and track reusable media.<br>`python3 skills/media-assets/scripts/intake_assets.py --library-root ASSET_LIBRARY --project-id PROJECT_ID [--source SOURCE]` |
@@ -21,6 +22,8 @@ The agent runs these internal commands; users provide the SRT or assets and the 
 ## Artifact flow
 
 ```text
+MULTI-REPORT SOURCES → Debate Map → approved narration
+                                      ↓
 usable SRT → initialized project → optional BRIEF refinement
                                       ↓
                         timed narration (audio + SRT)
@@ -92,6 +95,10 @@ python3 -m unittest discover -s tests -p 'test_image_*.py'
 2. Use [`skills/video/SKILL.md`](skills/video/SKILL.md) as the entry router.
 3. Read the relevant Skill and its linked references only for the requested stage.
 4. Run `./scripts/validate-foundation.sh` after changing the foundation.
+
+### 多投行研报文案
+
+使用 `$multi-report-video-script` 处理同一家公司的多份投行研报。默认先生成阶段 A 的 Debate Map 并停止；确认后再要求阶段 B，输出可直接用于 TTS 的最终文案和制作备注。完整规则保存在 [`prompt-v1.md`](skills/multi-report-video-script/references/prompt-v1.md)。
 
 ## Deliberate non-goals for this phase
 
