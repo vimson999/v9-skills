@@ -7,17 +7,26 @@ metadata:
 
 # Multi-report Video Script
 
-Build finance-video scripts from competing institutional views. The question is the protagonist, the institutions are witnesses, facts are the base, disagreement supplies the drama, and the conclusion is a decision framework rather than a target-price recital.
+Build finance-video scripts from competing institutional views. The question is the protagonist, institutions are witnesses, facts are the base, and disagreement supplies the drama. Research proves the claims; the TTS deliverable tells the story. Never mix those layers.
 
 ## Required reference
 
-Read [`references/prompt-v1.md`](references/prompt-v1.md) in full before producing either stage. Follow its required sections, writing rules, evidence discipline, and final checklist.
+Read [`references/prompt-v1.md`](references/prompt-v1.md) in full before producing either stage. Its output contract overrides the instinct to display research provenance inside the TTS copy.
 
 ## Choose the stage
 
-- **Stage A — Debate Map:** Use by default when the user supplies raw reports or source material. Produce the exact 11-section editorial-planning output defined in the reference, then stop for confirmation.
-- **Stage B — final script:** Use only when the user supplies or confirms a Debate Map. Produce only the TTS-ready final script and production notes required by the reference.
-- **Explicit one-pass request:** Build Stage A internally, then write Stage B. Preserve unresolved uncertainty instead of silently resolving conflicts.
+- **Stage A — research and Debate Map:** Use by default with raw reports. Build a sourced evidence layer and the exact 11-section Debate Map, then stop for confirmation.
+- **Stage B — delivery:** Use only from a supplied or approved Debate Map. Stage B changes how approved research is told; it does not introduce a new thesis, dispute, fact, or structure.
+- **Explicit one-pass request:** Complete the evidence and Debate Map layers internally before Stage B. Preserve unresolved uncertainty.
+
+## Strict delivery flow
+
+1. **Research evidence layer:** Verify facts, ratings, targets, forecasts, and models with report-level citations.
+2. **Debate Map:** Fix the mother question, disputes, institution positions, second climax, and validation metrics.
+3. **TTS master draft:** Follow only the approved map; remove citations, source markers, visual directions, and writing commentary.
+4. **TTS cleanup:** Normalize abbreviations, symbols, sentence length, number density, repeated phrases, and spoken rhythm. Formula on screen; logic in narration.
+5. **Delivery gate:** Require opening anomaly, mother question, second climax, Takeaway, and a short disclaimer unless the user explicitly opts out.
+6. **Production notes:** Put source mapping, on-screen numbers, interactions, and validation metrics outside the TTS copy.
 
 ## Inputs
 
@@ -30,6 +39,10 @@ Use reports about the same company. Accept the company, reports, platform, targe
 3. Surface unresolved numerical conflicts, missing context, and OCR or extraction uncertainty.
 4. Never invent ratings, target prices, EPS, valuation multiples, customers, causes, or timelines.
 5. Do not give personalized buy/sell advice or turn uncertainty into certainty.
+
+## Stage B output contract
+
+Return exactly two parts. Part A is clean, copy-ready TTS prose ordered as body → Takeaway → disclaimer. It contains no `filecite`, source label, footnote, URL, Markdown table, visual direction, or writing note. Part B contains production notes and the source-check map. Run the reference checklist before returning either part; if Part A contains a forbidden marker, rewrite it rather than explaining the mistake.
 
 ## Handoff boundary
 

@@ -98,7 +98,7 @@ python3 -m unittest discover -s tests -p 'test_image_*.py'
 
 ### 多投行研报文案
 
-使用 `$multi-report-video-script` 处理同一家公司的多份投行研报。默认先生成阶段 A 的 Debate Map 并停止；确认后再要求阶段 B，输出可直接用于 TTS 的最终文案和制作备注。完整规则保存在 [`prompt-v1.md`](skills/multi-report-video-script/references/prompt-v1.md)。
+使用 `$multi-report-video-script` 处理同一家公司的多份投行研报。默认先生成带来源的研究证据层和阶段 A Debate Map 并停止；确认后再执行阶段 B。阶段 B 的 TTS 成品稿零引用、经过朗读清洗，并按“正文 → Takeaway → 免责声明”交付；来源核对与画面信息单列在制作备注中。完整规则保存在 [`prompt-v1.md`](skills/multi-report-video-script/references/prompt-v1.md)。
 
 ## Deliberate non-goals for this phase
 
